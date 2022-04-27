@@ -1,0 +1,9 @@
+<div class="links clearfix">
+    <ul class="links-menu">
+        {% for prod_link in products_links %}
+        <li><a href="#" {% if prod_link == products_links.0 %}class="active"{% endif %}>
+            {{ prod_link }}
+        </a></li>
+        {% endfor %}
+    </ul>
+</div>
