@@ -5,7 +5,14 @@
 	{% include 'mainapp/includes/menu.html' %}
 </div>
 <div class="details">
-	{% include 'mainapp/includes/products_links.html' %}
+	<div class="links clearfix">
+		<ul class="links-menu">
+			<li><a href="#" class="active">all</a></li>
+			{% for category in categories %}
+			<li><a href="#" class="active">{{ category.name }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
 	<div class="details-products">
 		<div class="details-slider">
 			<div class="slider-product">
@@ -56,7 +63,8 @@
 		<div class="related-products clearfix">
 			{% for product in products %}
 			<div class="block">
-				<a href="#"><img src="{% static product.image %}" alt="">
+				<a href="#">
+					<img src="{{ product.image.url }}" alt="">
 					<div class="text">
 						<img src="{% static 'img/icon-hover.png' %}" alt="img">
 						<h4>{{ product.name }}</h4>
