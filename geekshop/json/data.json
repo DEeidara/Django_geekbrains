@@ -1,0 +1,20 @@
+{
+    "menu": {
+        "index": "Главная",
+        "products": "Продукты",
+        "contact": "Контакты"
+    },
+    "social_links": [
+        "social1",
+        "social2",
+        "social3",
+        "social4"
+    ],
+    "products_links": [
+        "все",
+        "дом",
+        "офис",
+        "модерн",
+        "классика"
+    ]
+}

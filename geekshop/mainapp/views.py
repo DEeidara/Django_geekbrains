@@ -1,8 +1,9 @@
 from django.shortcuts import render
 import json
 from .models import Product, Category
+from django.conf import settings
 
-with open('data.json', 'r', encoding='utf-8') as f:
+with open((settings.JSON_ROOT / 'data.json'), 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 

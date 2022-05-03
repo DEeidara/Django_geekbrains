@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'mainapp',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -128,8 +129,18 @@ STATICFILES_DIRS = (
     BASE_DIR / "static",
 )
 
+# media
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / "media"
+
+# JSON
+
+JSON_ROOT = BASE_DIR / "json"
+
+# User model
+
+AUTH_USER_MODEL = 'authapp.ShopUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
