@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import json
 from .models import Product, Category
 from django.conf import settings
@@ -15,14 +15,13 @@ def index(request):
 
 
 def products(request):
-    categories = Category.objects.all()[:6]
+    categories = Category.objects.all()
     products = Product.objects.all()[:3]
     return render(request, 'mainapp/products.html', context={
         'menu': data['menu'],
         'social_links': data['social_links'],
         'products': products,
         'categories': categories,
-        'products_links': data['products_links'],
     })
 
 
@@ -30,4 +29,17 @@ def contact(request):
     return render(request, 'mainapp/contact.html', context={
         'menu': data['menu'],
         'social_links': data['social_links'],
+    })
+
+
+def category(request, pk):
+    categories = Category.objects.all()
+    category = get_object_or_404(Category, pk=pk)
+    products = Product.objects.filter(category=category)
+    return render(request, 'mainapp/category.html', context={
+        'menu': data['menu'],
+        'social_links': data['social_links'],
+        'products': products,
+        'categories': categories,
+        'category': category
     })

@@ -1,0 +1,14 @@
+{% load static %}
+
+{% for product in products %}
+<div class="block">
+    <a href="{% url 'basket:add' product.id %}">
+        <img src="{{ product.image.url }}" alt="">
+        <div class="text">
+            <img src="{% static 'img/icon-hover.png' %}" alt="img">
+            <h4>{{ product.name }}</h4>
+            <p>{{ product.description|upper }}</p>
+        </div>
+    </a>
+</div>
+{% endfor %}

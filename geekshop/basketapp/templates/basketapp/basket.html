@@ -1,0 +1,8 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{% block content %}
+{% for item in basket %}
+    <p>{{ item }} <a href="{% url 'basket:remove' item.id %}">Remove</a><p>
+{% endfor %}
+{% endblock %}
