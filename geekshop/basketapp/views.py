@@ -1,26 +1,33 @@
 from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
+from django.conf import settings
 from .models import Basket
-from mainapp.models import Product
+from mainapp.models import Product, Category
+import json
+
+with open((settings.JSON_ROOT / 'data.json'), 'r', encoding='utf-8') as f:
+    data = json.load(f)
 
 
 def basket(request):
+    categories = Category.objects.all()
     return render(request, 'basketapp/basket.html', context={
-        'basket': Basket.objects.filter(user=request.user)
+        'basket': Basket.objects.filter(user=request.user),
+        'categories': categories,
+        'menu': data['menu'],
+        'social_links': data['social_links'],
     })
 
 
 def add(request, product_id):
-    basket = Basket.objects.filter(user=request.user)
     product = get_object_or_404(Product, pk=product_id)
-    if basket:
-        basket_item = basket[0]
-        basket_item.quantity += 1
-        basket_item.save()
-    else:
-        basket_item = Basket(user=request.user, product=product, quantity=1)
-        basket_item.save()
+    basket = Basket.objects.filter(user=request.user, product=product).first()
+
+    if not basket:
+        basket = Basket(user=request.user, product=product)
+    basket.quantity += 1
+    basket.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'), reverse('index'))
 
 
