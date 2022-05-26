@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponseRedirect
 from .forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserEditForm
 from django.contrib import auth
 from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
 
 def login(request):
@@ -12,8 +13,9 @@ def login(request):
 
         user = auth.authenticate(username=username, password=password)
         if user and user.is_active:
-            auth.login(request, user)
-            return HttpResponseRedirect(reverse('index'))
+            auth.login(request, user=user),
+            redirect_url = request.GET.get('next', reverse('index'))
+            return HttpResponseRedirect(redirect_url)
 
     content = {'title': 'Login', 'login_form': login_form}
     return render(request, 'authapp/login.html', content)
@@ -38,6 +40,7 @@ def register(request):
     return render(request, 'authapp/register.html', content)
 
 
+@login_required
 def edit(request):
     if request.method == 'POST':
         edit_form = ShopUserEditForm(

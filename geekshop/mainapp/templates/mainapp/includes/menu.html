@@ -10,7 +10,7 @@
         
         {% if request.user.is_authenticated %}
         <li><a href="{% url 'auth:edit' %}">{{ user.username }}</a></li>
-        <li><a href="{% url 'basket:basket' %}">Basket({{request.user.basket.quantity}})</a></li>
+        <li><a href="{% url 'basket:basket' %}">Basket({{ request.user.basket.total_quantity }})</a></li>
         <li><a href="{% url 'auth:logout' %}">Log out</a></li>
         {% else %}
         <li><a href="{% url 'auth:login' %}">Log in</a></li>
