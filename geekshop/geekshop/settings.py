@@ -108,6 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# User model
+AUTH_USER_MODEL = 'authapp.ShopUser'
+
+LOGIN_URL = 'auth:login'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -139,9 +143,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 JSON_ROOT = BASE_DIR / "json"
 
-# User model
-
-AUTH_USER_MODEL = 'authapp.ShopUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

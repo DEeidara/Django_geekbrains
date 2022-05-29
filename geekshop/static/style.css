@@ -1006,6 +1006,11 @@ td:first-child {
 	height: 570px;
 }
 
+.slider-product img {
+	width: 570px;
+	height: 570px;
+}
+
 .slider-control {
 	width: 420px;
 	height: 70px;

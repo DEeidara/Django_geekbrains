@@ -11,7 +11,7 @@
 	<div class="details-products">
 		<div class="details-slider">
 			<div class="slider-product">
-				<img src="{{ hot_product.image.url }}">
+				<img src="{{ product.image.url }}">
 			</div>
 			<div class="slider-control">
 				<div class="block">
@@ -33,24 +33,12 @@
 		</div>
 
 		<div class="description">
-			<h3 class="big-bold">{{ hot_product.name }}</h3>
-			<h3 class="red">горячее предложение</h3>
-			<p class="price">{{ hot_product.price}}<span>$</span></p>
-			<a href="{% url 'basket:add' hot_product.pk %}" class="red-button">
+			<h3 class="big-bold">{{ product.name }}</h3>
+			<p class="price">{{ product.price}}<span>$</span></p>
+			<a href="{% url 'basket:add' product.pk %}" class="red-button">
 				заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
 			</a>
-			<div class="description-text">{{ hot_product.description|linebreaks }}</div>
+			<div class="description-text">{{ product.description|linebreaks }}</div>
 		</div>
 	</div>
-
-	<div class="related">
-		<div class="title clearfix">
-			<h2>See also:</h2>
-			<a class="explore" href="#">Show All<img src="{% static 'img/arrow.png' %}" alt=""></a>
-		</div>
-		<div class="related-products clearfix">
-			{% include 'mainapp/includes/product_list.html'%}
-		</div>
-	</div>
-</div>	
 {% endblock %}
