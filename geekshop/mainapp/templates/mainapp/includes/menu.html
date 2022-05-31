@@ -9,12 +9,15 @@
         {% endwith %}
         
         {% if request.user.is_authenticated %}
-        <li><a href="{% url 'auth:edit' %}">{{ user.username }}</a></li>
-        <li><a href="{% url 'basket:basket' %}">Basket({{ request.user.basket.total_quantity }})</a></li>
-        <li><a href="{% url 'auth:logout' %}">Log out</a></li>
+            <li><a href="{% url 'auth:edit' %}">{{ user.username }}</a></li>
+            <li><a href="{% url 'basket:basket' %}">Basket({{ request.user.basket.total_quantity }})</a></li>
+            {% if request.user.is_superuser %}
+                <li><a href="{% url 'admin:users' %}">Admin panel</a></li>
+            {% endif %}
+            <li><a href="{% url 'auth:logout' %}">Log out</a></li>
         {% else %}
-        <li><a href="{% url 'auth:login' %}">Log in</a></li>
-        <li><a href="{% url 'auth:register' %}">Sign up</a></li>
+            <li><a href="{% url 'auth:login' %}">Log in</a></li>
+            <li><a href="{% url 'auth:register' %}">Sign up</a></li>
         {% endif %}
     </ul>
     <a href="#" class="search"></a>

@@ -1,0 +1,12 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'adminapp/includes/inc_menu.html' %}
+<h2 class='form-header'>{{ title }}</h2>
+<form class="form-horizontal" action="{% url 'admin:category_update' category.pk %}" method="post"
+enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="form-control btn btn-primary" type="submit" value="Save">
+</form>
+{% endblock %}

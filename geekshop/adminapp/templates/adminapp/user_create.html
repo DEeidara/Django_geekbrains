@@ -1,0 +1,13 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'adminapp/includes/inc_menu.html' %}
+<h2 class='form-header'>{{ title }}</h2>
+<form class="row g-2" action="{% url 'admin:user_create' %}"
+method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <br>
+    <input class="form-control btn btn-primary" type="submit" value="Create a new user">
+</form>
+{% endblock %}
