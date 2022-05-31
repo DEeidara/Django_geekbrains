@@ -1,0 +1,8 @@
+.inactive {
+    color: gray;
+    background-color: lightgray;
+}
+
+.form-header {
+    margin-top: 20px;
+}

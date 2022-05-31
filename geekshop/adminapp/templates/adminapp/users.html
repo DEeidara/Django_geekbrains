@@ -1,0 +1,45 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'adminapp/includes/inc_menu.html' %} <br>
+<a href={% url 'admin:user_create' %} class="btn btn-info">Create user</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">First name</th>
+            <th scope="col">Last name</th>
+            <th scope="col">Age</th>
+            <th scope="col">Email</th>
+            <th scope="col">Last login</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for object in objects %}
+        <tr class="{% if not object.is_active %} inactive {% endif %}">
+            <th scope="row">{{ object.username }}</th>
+            <td>{{ object.first_name|title|default:'' }}</td>
+            <td>{{ object.last_name|title|default:'' }}</td>
+            <td>{{ object.age|default:'' }}</td>
+            <td>{{ object.email|default:'' }}</td>
+            <td>{{ object.last_login }}</td>
+            <td>
+                <a href={% url 'admin:user_update' object.pk %} 
+                class="btn btn-info">Edit</a>
+            </td>
+            <td>
+                <a href={% url 'admin:user_delete' object.pk %} 
+                class="btn
+                {% if not object.is_active %}
+                    btn-success">Activate</a>
+                {% else %} 
+                    btn-danger">Deactivate</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

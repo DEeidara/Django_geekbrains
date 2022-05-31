@@ -1,0 +1,17 @@
+<div class="btn-group" style="margin-bottom: 25px;" role="group" aria-label="Basic example">
+    <a href="{% url 'index' %}" class="btn btn-primary">
+        Home
+    </a>
+    <a href="{% url 'admin:users' %}" class="btn btn-primary
+        {% if request.resolver_match.url_name == 'users' %}
+            active
+        {% endif %}">
+        Users
+    </a>
+    <a href="{% url 'admin:categories' %}" class="btn btn-primary
+        {% if request.resolver_match.url_name == 'categories' or category.name %}
+            active
+        {% endif %}">
+        Categories
+    </a>
+</div>
