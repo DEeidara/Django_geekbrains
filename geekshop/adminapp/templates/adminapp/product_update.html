@@ -3,7 +3,7 @@
 {% block content %}
 {% include 'adminapp/includes/inc_menu.html' %}
 <h2 class='form-header'>{{ title }}</h2>
-<form class="form-horizontal" action="{% url 'admin:user_update' object.pk %}" method="post"
+<form class="form-horizontal" action="{% url 'admin:product_update' product.pk %}" method="post"
 enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}

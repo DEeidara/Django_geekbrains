@@ -4,50 +4,52 @@ from adminapp.forms import (
     ShopUserRegistrationForm,
     ShopUserEditForm,
     CategoryCreateEditForm,
+    ProductCreateEditForm,
 )
 from django.shortcuts import get_object_or_404, render
 from mainapp.models import Product, Category
 from django.http.response import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from adminapp.utils import check_is_superuser
+from django.views.generic import ListView, CreateView, UpdateView
+from django.utils.decorators import method_decorator
 
 
-@check_is_superuser
-def users(request):
-    users_list = ShopUser.objects.all()
-    return render(
-        request,
-        "adminapp/users.html",
-        context={"title": "Users", "objects": users_list},
-    )
+class TitleMixin:
+    title = None
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = self.title
+        return context
 
 
-@check_is_superuser
-def user_create(request):
-    form = ShopUserRegistrationForm()
-    if request.method == "POST":
-        form = ShopUserRegistrationForm(request.POST, request.FILES)
-
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:users"))
-
-    content = {"title": "User creation", "form": form}
-    return render(request, "adminapp/user_create.html", content)
+class SuperUserRequiredMixin:
+    @method_decorator(check_is_superuser)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
 
-@check_is_superuser
-def user_update(request, pk):
-    user = get_object_or_404(ShopUser, pk=pk)
-    form = ShopUserEditForm(instance=user)
-    if request.method == "POST":
-        form = ShopUserEditForm(data=request.POST, files=request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:users"))
+class UserListView(SuperUserRequiredMixin, TitleMixin, ListView):
+    title = "Users"
+    template_name = "adminapp/users.html"
+    queryset = ShopUser.objects.order_by("date_joined")
 
-    content = {"title": "Edit user", "form": form, "user": user}
-    return render(request, "adminapp/user_update.html", content)
+
+class UserCreateView(SuperUserRequiredMixin, TitleMixin, CreateView):
+    title = "Create user"
+    template_name = "adminapp/user_create.html"
+    model = ShopUser
+    form_class = ShopUserRegistrationForm
+    success_url = reverse_lazy("admin:users")
+
+
+class UserUpdateView(SuperUserRequiredMixin, TitleMixin, UpdateView):
+    title = "Edit user"
+    template_name = "adminapp/user_update.html"
+    model = ShopUser
+    form_class = ShopUserEditForm
+    success_url = reverse_lazy("admin:users")
 
 
 @check_is_superuser
@@ -62,55 +64,53 @@ def user_de_activate(request, pk):
     return HttpResponseRedirect(reverse("admin:users"))
 
 
-@check_is_superuser
-def categories(request):
-    categories_list = Category.objects.all()
-    return render(
-        request,
-        "adminapp/categories.html",
-        context={"title": "Categories", "objects": categories_list},
-    )
-
-
-@check_is_superuser
-def category_create(request):
-    form = CategoryCreateEditForm()
+def user_delete(request, pk):
+    title = "Delete user"
+    user = get_object_or_404(ShopUser, pk=pk)
     if request.method == "POST":
-        form = CategoryCreateEditForm(request.POST)
-
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:categories"))
-
-    content = {"title": "Category creation", "form": form}
-    return render(request, "adminapp/category_create.html", content)
+        user.delete()
+        return HttpResponseRedirect(reverse("admin:users"))
+    content = {"title": title, "user": user}
+    return render(request, "adminapp/user_delete.html", content)
 
 
-@check_is_superuser
-def category_update(request, pk):
-    category = get_object_or_404(Category, pk=pk)
-    form = CategoryCreateEditForm(instance=category)
-    if request.method == "POST":
-        form = CategoryCreateEditForm(request.POST, instance=category)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse("admin:categories"))
+class CategoryListView(SuperUserRequiredMixin, TitleMixin, ListView):
+    title = "Categories"
+    template_name = "adminapp/categories.html"
+    model = Category
 
-    content = {"title": "Edit category", "form": form, "category": category}
-    return render(request, "adminapp/category_update.html", content)
+
+class CategoryCreateView(SuperUserRequiredMixin, TitleMixin, CreateView):
+    title = "Category create"
+    model = Category
+    template_name = "adminapp/category_create.html"
+    success_url = reverse_lazy("admin:categories")
+    form_class = CategoryCreateEditForm
+
+
+class CategoryUpdateView(SuperUserRequiredMixin, TitleMixin, UpdateView):
+    title = "Category edit"
+    model = Category
+    template_name = "adminapp/category_update.html"
+    success_url = reverse_lazy("admin:categories")
+    form_class = CategoryCreateEditForm
 
 
 @check_is_superuser
 def category_de_activate(request, pk):
     category = get_object_or_404(Category, pk=pk)
-    category.is_active = False
-    category.save()
+    if category.is_active:
+        category.is_active = False
+        category.save()
+    else:
+        category.is_active = True
+        category.save()
     return HttpResponseRedirect(reverse("admin:categories"))
 
 
 @check_is_superuser
-def products(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+def products(request, category_pk):
+    category = get_object_or_404(Category, pk=category_pk)
     products_list = Product.objects.filter(category=category)
     return render(
         request,
@@ -123,13 +123,59 @@ def products(request, pk):
     )
 
 
-def product_create(request, pk):
-    pass
+@check_is_superuser
+def product_create(request, category_pk):
+    category = get_object_or_404(Category, pk=category_pk)
+    form = ProductCreateEditForm(initial={"category": category})
+    if request.method == "POST":
+        form = ProductCreateEditForm(data=request.POST, files=request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("admin:products", args=[category_pk]))
+
+    content = {"title": "Create product", "form": form, "category": category}
+    return render(request, "adminapp/product_create.html", content)
 
 
-def product_update(request, pk):
-    pass
+@check_is_superuser
+def product_update(request, product_pk):
+    product = get_object_or_404(Product, pk=product_pk)
+    form = ProductCreateEditForm(instance=product)
+    if request.method == "POST":
+        form = ProductCreateEditForm(
+            data=request.POST, files=request.FILES, instance=product
+        )
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(
+                reverse("admin:products", args=[product.category.pk])
+            )
+
+    content = {"title": "Edit product", "form": form, "product": product}
+    return render(request, "adminapp/product_update.html", content)
 
 
-def product_de_activate(request, pk):
-    pass
+@check_is_superuser
+def product_de_activate(request, product_pk):
+    product = get_object_or_404(Product, pk=product_pk)
+    if product.is_active:
+        product.is_active = False
+        product.save()
+    else:
+        product.is_active = True
+        product.save()
+    return HttpResponseRedirect(reverse("admin:products", args=[product.category.pk]))
+
+
+@check_is_superuser
+def product_delete(request, product_pk):
+    title = "Delete product"
+    product = get_object_or_404(Product, pk=product_pk)
+    if request.method == "POST":
+        product.delete()
+        return HttpResponseRedirect(
+            reverse("admin:products", args=[product.category.pk])
+        )
+    content = {"title": title, "product": product}
+    return render(request, "adminapp/product_delete.html", content)

@@ -11,6 +11,12 @@
 	<div class="category-products related">
 		<div class="title clearfix">
 			<h2>{{ category.name }}</h2>
+				{% if products.has_next %}
+				<a class="explore" href="{% url 'category' category.id products.next_page_number %}">Next page -></a> <br>
+				{% endif %}
+				{% if products.has_previous %}
+				<a class="explore" href="{% url 'category' category.id products.previous_page_number %}"><- Previous page</a>
+				{% endif %}
 		</div>
 		<div class="related-products clearfix">
 			{% include 'mainapp/includes/product_list.html'%}

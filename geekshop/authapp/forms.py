@@ -38,8 +38,6 @@ class ShopUserRegistrationForm(UserCreationForm):
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
             field.help_text = ""
-            if field_name == "age":
-                field.required = True
 
     def clean_age(self):
         data = self.cleaned_data["age"]
