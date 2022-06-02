@@ -1,0 +1,15 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="delete_page fw-bolder">
+    Are you sure you want to delete: {{ product.name }}?
+    <form action="{% url 'admin:product_delete' product.pk %}"
+        method="post">
+        {% csrf_token %}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        <a class="btn btn-primary" href="{% url 'admin:products' product.category.pk %}">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

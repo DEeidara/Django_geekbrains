@@ -1,0 +1,21 @@
+{% extends 'adminapp/base.html' %}
+{% load static %}
+{% block content %}
+<div class="delete_page fw-bolder">
+    Are you sure you want to delete: {{ user.username }}
+    {% if user.first_name %}
+        ({{ user.first_name|title }}</b>
+        {% if user.last_name %}
+            {{ user.last_name|title }}
+        {% endif %})
+    {% endif %}?
+    <form action="{% url 'admin:user_delete' user.pk %}"
+        method="post">
+        {% csrf_token %}
+        <input class="btn btn-danger" type="submit" value="Delete">
+        <a class="btn btn-primary" href="{% url 'admin:users' %}">
+            Cancel
+        </a>
+    </form>
+</div>
+{% endblock %}

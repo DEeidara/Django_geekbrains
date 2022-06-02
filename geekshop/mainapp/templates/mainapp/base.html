@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load my_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,7 +33,7 @@
                 </form>
             </div>
         </div>
-        <p class="small">&copy; GB 2017</p>
+        <p class="small">&copy; GB {% current_year %}</p>
         <div class="social">
             {% for social in social_links %}
             <a href="#" class="{{social}}"></a> 

@@ -1,7 +1,14 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.forms import TextInput, EmailInput, CharField, PasswordInput, ModelForm
+from django.forms import (
+    TextInput,
+    EmailInput,
+    CharField,
+    PasswordInput,
+    ModelForm,
+)
+from django.forms.widgets import HiddenInput
 from authapp.models import ShopUser
-from mainapp.models import Category
+from mainapp.models import Category, Product
 
 admin_form_widgets = {
     "username": TextInput(attrs={"class": "form-control", "placeholder": "Username"}),
@@ -40,7 +47,6 @@ class ShopUserRegistrationForm(UserCreationForm):
             "age",
             "avatar",
         )
-        widgets = admin_form_widgets
 
 
 class ShopUserEditForm(UserChangeForm):
@@ -55,10 +61,19 @@ class ShopUserEditForm(UserChangeForm):
             "avatar",
             "is_active",
         )
-        widgets = admin_form_widgets
 
 
 class CategoryCreateEditForm(ModelForm):
     class Meta:
         model = Category
         fields = "__all__"
+
+
+class ProductCreateEditForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["category"].widget = HiddenInput()

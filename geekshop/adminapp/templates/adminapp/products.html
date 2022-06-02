@@ -3,6 +3,7 @@
 {% block content %}
 {% include 'adminapp/includes/inc_menu.html' %} <br>
 <h2 class='form-header'>{{ title }}</h2>
+<a href={% url 'admin:product_create' category.pk %} class="btn btn-info">Create product</a>
 <table class="table">
     <thead>
         <tr>
@@ -12,13 +13,14 @@
             <th scope="col">Quantity</th>
             <th scope="col"></th>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
         {% for object in objects %}
         <tr class="{% if not object.is_active %} inactive {% endif %}">
             <th scope="row">{{ object.name }}</th>
-            <td>{{ object.desription|default:'' }}</td>
+            <td>{{ object.description|default:'' }}</td>
             <td>{{ object.price }}</td>
             <td>{{ object.quantity }}</td>
             <td>
@@ -26,13 +28,17 @@
                 class="btn btn-info">Edit</a>
             </td>
             <td>
-                <a href={% url 'admin:product_delete' object.pk %} 
+                <a href={% url 'admin:product_de_activate' object.pk %} 
                 class="btn
                 {% if not object.is_active %}
                     btn-success">Activate</a>
                 {% else %} 
-                    btn-danger">Deactivate</a>
+                    btn-warning">Deactivate</a>
                 {% endif %}
+            </td>
+            <td>
+                <a href={% url 'admin:product_delete' object.pk %} 
+                class="btn btn-danger">Delete</a>
             </td>
         </tr>
         {% endfor %}

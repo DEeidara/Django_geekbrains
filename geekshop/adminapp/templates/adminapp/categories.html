@@ -1,7 +1,8 @@
 {% extends 'adminapp/base.html' %}
 {% load static %}
 {% block content %}
-{% include 'adminapp/includes/inc_menu.html' %} <br>
+{% include 'adminapp/includes/inc_menu.html' %}
+<h2 class='form-header'>{{ title }}</h2>
 <a href={% url 'admin:category_create' %} class="btn btn-info">Create category</a>
 <table class="table">
     <thead>
@@ -11,13 +12,14 @@
             <th scope="col">Products</th>
             <th scope="col"></th>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody>
-        {% for object in objects %}
+        {% for object in object_list %}
         <tr class="{% if not object.is_active %} inactive {% endif %}">
             <th scope="row">{{ object.name }}</th>
-            <td>{{ object.desription|default:'' }}</td>
+            <td>{{ object.description|default:'' }}</td>
             <td>
                 <a href={% url 'admin:products' object.pk %} 
                 class="btn btn-info">To Products</a>
@@ -27,12 +29,12 @@
                 class="btn btn-info">Edit</a>
             </td>
             <td>
-                <a href={% url 'admin:category_delete' object.pk %} 
+                <a href={% url 'admin:category_de_activate' object.pk %} 
                 class="btn
                 {% if not object.is_active %}
                     btn-success">Activate</a>
                 {% else %} 
-                    btn-danger">Deactivate</a>
+                    btn-warning">Deactivate</a>
                 {% endif %}
             </td>
         </tr>
