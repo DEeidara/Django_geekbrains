@@ -1,4 +1,4 @@
-{% for item in user.basket.all %}
+{% for item in basket.all %}
 <div class="basket_record">
     <img src="/media/{{ item.product.image }}"
     alt="{{ item.product.description }}">
@@ -12,5 +12,6 @@
 </div>
 {% endfor %}
 <div class="basket_summary">
-    There are {{ user.basket.total_quantity|default:0 }} items in the basket with a total cost of {{ user.basket.total_sum|default:0 }} $
+    There are {{ basket.total_quantity|default:0 }} items in the basket with a total cost of 
+    {{ basket.total_sum|default:0 }} $
 </div>

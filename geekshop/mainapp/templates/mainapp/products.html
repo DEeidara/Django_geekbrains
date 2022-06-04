@@ -1,6 +1,5 @@
 {% extends 'mainapp/base.html'%}
 {% load static %}
-{% load my_tags %}
 {% block content %}
 <div class="hero-white">
 	{% include 'mainapp/includes/menu.html' %}
@@ -34,7 +33,7 @@
 		</div>
 
 		<div class="description">
-			<h3 class="big-bold">{{ hot_product.name|color_text:'red' }}</h3>
+			<h3 class="big-bold">{{ hot_product.name }}</h3>
 			<h3 class="red">горячее предложение</h3>
 			<p class="price">{{ hot_product.price}}<span>$</span></p>
 			<a href="{% url 'basket:add' hot_product.pk %}" class="red-button">

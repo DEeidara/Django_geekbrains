@@ -1,17 +1,17 @@
 <div class="header clearfix">
     <a href="{% url 'index' %}" class="logo"></a>
     <ul class="menu">
-        {% with url_name=request.resolver_match.url_name %}
+        {% with url_name=resolver_match.url_name %}
         {% for link, name in menu.items %}
         <li><a href="{% url link %}" class="{% if url_name == link %} active {% endif %}">
             {{ name }}</a></li>
         {% endfor %}
         {% endwith %}
         
-        {% if request.user.is_authenticated %}
+        {% if user.is_authenticated %}
             <li><a href="{% url 'auth:edit' %}">{{ user.username }}</a></li>
-            <li><a href="{% url 'basket:basket' %}">Basket({{ request.user.basket.total_quantity }})</a></li>
-            {% if request.user.is_superuser %}
+            <li><a href="{% url 'basket:basket' %}">Basket({{ basket.total_quantity }})</a></li>
+            {% if user.is_superuser %}
                 <li><a href="{% url 'admin:users' %}">Admin panel</a></li>
             {% endif %}
             <li><a href="{% url 'auth:logout' %}">Log out</a></li>
