@@ -1,0 +1,11 @@
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: Verify your account
+From: no-reply@localhost
+To: heyho@localhost
+Date: Sat, 04 Jun 2022 23:05:18 -0000
+Message-ID: <165438391890.1368.3715290456668946235@DESKTOP-230COOS>
+
+Use this link to verify your account: http://localhost:8000/auth/verify/heyho@localhost/09fb53a3-a90d-4188-a003-88019c8582f7/
+-------------------------------------------------------------------------------

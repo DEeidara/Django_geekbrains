@@ -1,24 +1,15 @@
 from django.shortcuts import render, get_object_or_404
-import json
 from .models import Product, Category
-from django.conf import settings
 import random
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
-
-with open((settings.JSON_ROOT / "data.json"), "r", encoding="utf-8") as f:
-    data = json.load(f)
 
 
 def index(request):
     return render(
         request,
         "mainapp/index.html",
-        context={
-            "menu": data["menu"],
-            "social_links": data["social_links"],
-        },
     )
 
 
@@ -31,8 +22,6 @@ def products(request):
         request,
         "mainapp/products.html",
         context={
-            "menu": data["menu"],
-            "social_links": data["social_links"],
             "hot_product": hot_product,
             "products": products,
             "categories": categories,
@@ -47,8 +36,6 @@ def product(request, pk):
         request,
         "mainapp/product.html",
         context={
-            "menu": data["menu"],
-            "social_links": data["social_links"],
             "product": product,
             "category": product.category,
             "categories": categories,
@@ -60,10 +47,6 @@ def contact(request):
     return render(
         request,
         "mainapp/contact.html",
-        context={
-            "menu": data["menu"],
-            "social_links": data["social_links"],
-        },
     )
 
 
@@ -79,8 +62,6 @@ def category(request, pk, page=1):
         request,
         "mainapp/category.html",
         context={
-            "menu": data["menu"],
-            "social_links": data["social_links"],
             "products": paginator.page(page),
             "categories": categories,
             "category": category,
