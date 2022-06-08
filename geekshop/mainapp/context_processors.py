@@ -13,4 +13,4 @@ def data(request):
 
 
 def basket(request):
-    return {"basket": request.user.basket}
+    return {"basket": getattr(request.user, "basket", None)}

@@ -1,10 +1,16 @@
 from django.shortcuts import render, HttpResponseRedirect
-from .forms import ShopUserLoginForm, ShopUserRegistrationForm, ShopUserEditForm
+from .forms import (
+    ShopUserLoginForm,
+    ShopUserRegistrationForm,
+    ShopUserEditForm,
+    ShopUserProfileEditForm,
+)
 from django.contrib import auth
 from django.urls import reverse
 from .utils import send_verification_mail
 from django.contrib.auth.decorators import login_required
 from .models import ShopUser
+from django.db import transaction
 
 
 def login(request):
@@ -42,17 +48,24 @@ def register(request):
     return render(request, "authapp/register.html", content)
 
 
+@transaction.atomic
 @login_required
 def edit(request):
-    form = ShopUserEditForm(instance=request.user)
+    user_form = ShopUserEditForm(instance=request.user)
+    profile_form = ShopUserProfileEditForm(instance=request.user.profile)
     if request.method == "POST":
-        form = ShopUserEditForm(request.POST, request.FILES, instance=request.user)
-
-        if form.is_valid():
-            form.save()
+        user_form = ShopUserEditForm(
+            data=request.POST, files=request.FILES, instance=request.user
+        )
+        profile_form = ShopUserProfileEditForm(
+            data=request.POST, instance=request.user.profile
+        )
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
             return HttpResponseRedirect(reverse("auth:edit"))
 
-    content = {"title": "Edit", "form": form}
+    content = {"title": "Edit", "user_form": user_form, "profile_form": profile_form}
     return render(request, "authapp/edit.html", content)
 
 
