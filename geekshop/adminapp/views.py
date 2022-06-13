@@ -10,24 +10,9 @@ from django.shortcuts import get_object_or_404, render
 from mainapp.models import Product, Category
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from adminapp.utils import check_is_superuser
+from utils.decorators import check_is_superuser
+from utils.mixins import SuperUserRequiredMixin, TitleMixin
 from django.views.generic import ListView, CreateView, UpdateView
-from django.utils.decorators import method_decorator
-
-
-class TitleMixin:
-    title = None
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["title"] = self.title
-        return context
-
-
-class SuperUserRequiredMixin:
-    @method_decorator(check_is_superuser)
-    def dispatch(self, request, *args, **kwargs):
-        return super().dispatch(request, *args, **kwargs)
 
 
 class UserListView(SuperUserRequiredMixin, TitleMixin, ListView):

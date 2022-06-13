@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "authapp",
     "basketapp",
     "adminapp",
+    "ordersapp",
 ]
 
 MIDDLEWARE = [
@@ -125,6 +126,9 @@ AUTHENTICATION_BACKENDS = [
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = os.environ.get("SOCIAL_AUTH_VK_OAUTH2_KEY")
 SOCIAL_AUTH_VK_OAUTH2_SECRET = os.environ.get("SOCIAL_AUTH_VK_OAUTH2_SECRET")
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = [
+    "email",
+]
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",

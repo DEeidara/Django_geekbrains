@@ -6,10 +6,10 @@
     {% csrf_token %}
     {{ form.as_p }}
     <br>
-    <input class="form-control" type="submit" value="Log in">
-    <a href="{% url 'auth:register' %}">
+    <input class="btn btn-primary" type="submit" value="Log in">
+    <a class="btn btn-primary" href="{% url 'auth:register' %}">
         Sign up
     </a>
-    <a href="{% url "social:begin" "vk-oauth2" %}">Login with VK</a>
+    <a class="btn btn-primary" href="{% url "social:begin" "vk-oauth2" %}">Login with VK</a>
 </form>
 {% endblock %}

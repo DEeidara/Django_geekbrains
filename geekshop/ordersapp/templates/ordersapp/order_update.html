@@ -1,0 +1,20 @@
+{% extends 'mainapp/base.html' %}
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+{% include 'mainapp/includes/header_of_products.html' %}
+<h2 class='form-header'>{{ title }}</h2>
+<form class="form-inline" action="{% url 'orders:update' object.pk %}" method="post"
+enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ orderitems.management_form }}
+    {% for item_form in orderitems %}
+        <fieldset class="order-indentation">
+            {{ item_form }}
+        </fieldset>
+    {% endfor %}
+    <input class="order-indentation btn btn-primary" type="submit" value="Save">
+</form>
+{% endblock %}

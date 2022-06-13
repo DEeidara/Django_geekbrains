@@ -41,7 +41,9 @@ class ShopUserProfile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDERS)
 
     @receiver(post_save, sender=ShopUser)
-    def create_user_profile(sender, instance, created, **kwargs):
+    def update_user_profile(sender, instance, created, **kwargs):
         if created:
             profile = ShopUserProfile(user=instance)
             profile.save()
+        else:
+            instance.profile.save()

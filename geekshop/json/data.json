@@ -1,8 +1,8 @@
 {
     "menu": {
-        "index": "Главная",
-        "products": "Продукты",
-        "contact": "Контакты"
+        "index": "Home",
+        "products": "Products",
+        "contact": "Contacts"
     },
     "social_links": [
         "social1",

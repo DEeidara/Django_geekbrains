@@ -13,9 +13,10 @@ class BasketManager(models.Manager):
 
 class Basket(models.Model):
     user = models.ForeignKey(
-        get_user_model(), on_delete=models.CASCADE, related_name='basket')
+        get_user_model(), on_delete=models.CASCADE, related_name="basket"
+    )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
+    quantity = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = BasketManager()
@@ -25,4 +26,4 @@ class Basket(models.Model):
         return self.quantity * self.product.price
 
     def __str__(self):
-        return f'{self.product} - {self.quantity} pcs'
+        return f"{self.product} - {self.quantity} pcs"

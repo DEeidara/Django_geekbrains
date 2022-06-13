@@ -2,17 +2,11 @@
 {% load static %}
 
 {% block content %}
-    <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
+<form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
 enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ user_form.as_p }}
-        {{ profile_form.as_p }}
-        <input class="form-control" type="submit" value="save">
-    </form>
-    <button class="btn btn-round form-control last">
-        <a href="{% url 'index' %}" class="">
-            Home
-        </a>
-    </button>
-    <div class="user_avatar"><img src="/media/{{ user.avatar }}"></div>
+    {% csrf_token %}
+    {{ user_form.as_p }}
+    {{ profile_form.as_p }}
+    <input class="indent-class form-control btn btn-primary" type="submit" value="Save">
+</form>
 {% endblock %}
