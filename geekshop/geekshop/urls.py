@@ -29,6 +29,7 @@ urlpatterns = [
     path("products/<int:pk>/<int:page>/", mainapp.category, name="category"),
     path("product/<int:pk>/", mainapp.product, name="product"),
     path("admin/", include("adminapp.urls", namespace="admin")),
+    path("orders/", include("ordersapp.urls", namespace="orders")),
 ]
 
 if settings.DEBUG:

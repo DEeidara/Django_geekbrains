@@ -1215,3 +1215,11 @@ td:first-child {
 .category-products.related-products {
 	margin-bottom: 0px;
 }
+
+.product-name-indentation {
+    margin-bottom: 25px !important;
+}
+
+.order-indentation {
+	margin-top: 25px;
+}

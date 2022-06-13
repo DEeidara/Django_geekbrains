@@ -7,7 +7,7 @@ from .forms import (
 )
 from django.contrib import auth
 from django.urls import reverse
-from .utils import send_verification_mail
+from utils.mail import send_verification_mail
 from django.contrib.auth.decorators import login_required
 from .models import ShopUser
 from django.db import transaction

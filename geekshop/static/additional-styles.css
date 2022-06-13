@@ -1,3 +1,7 @@
+.indent-class {
+    margin: 10px 0 10px 0;
+}
+
 .inactive {
     color: gray;
     background-color: lightgray;

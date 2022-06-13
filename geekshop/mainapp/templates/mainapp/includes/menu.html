@@ -9,8 +9,16 @@
         {% endwith %}
         
         {% if user.is_authenticated %}
-            <li><a href="{% url 'auth:edit' %}">{{ user.username }}</a></li>
-            <li><a href="{% url 'basket:basket' %}">Basket({{ basket.total_quantity }})</a></li>
+            <li>
+                <div class="dropdown">
+                    <a class="inactive" href="#">{{ user.username }}</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'auth:edit' %}">Profile</a>
+                        <a href="{% url 'basket:basket' %}">Basket&nbsp;({{ basket.total_quantity }})</a>
+                        <a href="{% url 'orders:list' %}">Orders</a>
+                    </div>
+                </div>
+            </li>
             {% if user.is_superuser %}
                 <li><a href="{% url 'admin:users' %}">Admin panel</a></li>
             {% endif %}
