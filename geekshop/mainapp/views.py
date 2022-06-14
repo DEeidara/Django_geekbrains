@@ -14,7 +14,6 @@ def index(request):
 
 
 def products(request):
-    categories = Category.objects.all()
     products = Product.objects.all()
     hot_product = random.choice(products)
     products = products.exclude(pk=hot_product.pk)[:3]
@@ -24,13 +23,11 @@ def products(request):
         context={
             "hot_product": hot_product,
             "products": products,
-            "categories": categories,
         },
     )
 
 
 def product(request, pk):
-    categories = Category.objects.all()
     product = get_object_or_404(Product, pk=pk)
     return render(
         request,
@@ -38,7 +35,6 @@ def product(request, pk):
         context={
             "product": product,
             "category": product.category,
-            "categories": categories,
         },
     )
 
@@ -51,7 +47,6 @@ def contact(request):
 
 
 def category(request, pk, page=1):
-    categories = Category.objects.all()
     category = get_object_or_404(Category, pk=pk)
     products = Product.objects.filter(category=category).order_by("price")
     paginator = Paginator(products, per_page=3)
@@ -63,7 +58,6 @@ def category(request, pk, page=1):
         "mainapp/category.html",
         context={
             "products": paginator.page(page),
-            "categories": categories,
             "category": category,
         },
     )

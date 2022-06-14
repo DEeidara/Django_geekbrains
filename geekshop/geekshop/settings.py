@@ -71,6 +71,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "mainapp.context_processors.data",
                 "mainapp.context_processors.basket",
+                "mainapp.context_processors.categories",
             ],
         },
     },
@@ -87,7 +88,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.mysql",
         "NAME": "django_geekbrains",
         "USER": "root",
-        "PASSWORD": "DianA1201",
+        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
         "HOST": "localhost",
         "PORT": "3306",
     }

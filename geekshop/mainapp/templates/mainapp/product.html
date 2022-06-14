@@ -36,7 +36,7 @@
 			<h3 class="big-bold product-name-indentation">{{ product.name }}</h3>
 			<p class="price">{{ product.price }}<span>$</span></p>
 			<a href="{% url 'basket:add' product.pk %}" class="red-button">
-				заказать <i class="fa fa-chevron-right" aria-hidden="true"></i>
+				order <i class="fa fa-chevron-right" aria-hidden="true"></i>
 			</a>
 			<div class="description-text">{{ product.description|linebreaks }}</div>
 		</div>

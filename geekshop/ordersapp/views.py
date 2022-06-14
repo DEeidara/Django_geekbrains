@@ -1,10 +1,7 @@
-from cmath import e
-from django.forms import formset_factory, inlineformset_factory
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-
-from .forms import OrderItemForm, OrderItemFormset
+from .forms import OrderItemFormset
 from .models import Order, OrderItem
 from django.contrib.auth.decorators import login_required
 from utils.mixins import LoginRequiredMixin, TitleMixin
@@ -15,7 +12,9 @@ from django.db import transaction
 class OrderListView(LoginRequiredMixin, TitleMixin, ListView):
     title = "Orders"
     template_name = "ordersapp/order_list.html"
-    queryset = Order.objects.order_by("created_at")
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user).order_by("created_at")
 
 
 @login_required
