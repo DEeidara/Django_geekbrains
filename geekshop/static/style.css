@@ -1223,3 +1223,10 @@ td:first-child {
 .order-indentation {
 	margin-top: 25px;
 }
+
+.red-button.disabled {
+	pointer-events: none;
+	cursor: default;
+	text-decoration: none;
+	background-color: grey;
+  }

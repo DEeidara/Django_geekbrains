@@ -3,13 +3,13 @@ from django.conf import settings
 from .models import Category
 
 with open((settings.JSON_ROOT / "data.json"), "r", encoding="utf-8") as f:
-    data_js = json.load(f)
+    data_json = json.load(f)
 
 
 def data(request):
     return {
-        "menu": data_js["menu"],
-        "social_links": data_js["social_links"],
+        "menu": data_json["menu"],
+        "social_links": data_json["social_links"],
     }
 
 

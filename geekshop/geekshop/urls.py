@@ -20,16 +20,13 @@ from mainapp import views as mainapp
 
 urlpatterns = [
     path("", mainapp.index, name="index"),
-    path("products/", mainapp.products, name="products"),
     path("contact/", mainapp.contact, name="contact"),
     path("social/", include("social_django.urls", namespace="social")),
     path("auth/", include("authapp.urls", namespace="auth")),
     path("basket/", include("basketapp.urls", namespace="basket")),
-    path("products/<int:pk>/", mainapp.category, name="category"),
-    path("products/<int:pk>/<int:page>/", mainapp.category, name="category"),
-    path("product/<int:pk>/", mainapp.product, name="product"),
     path("admin/", include("adminapp.urls", namespace="admin")),
     path("orders/", include("ordersapp.urls", namespace="orders")),
+    path("products/", include("mainapp.urls", namespace="products")),
 ]
 
 if settings.DEBUG:

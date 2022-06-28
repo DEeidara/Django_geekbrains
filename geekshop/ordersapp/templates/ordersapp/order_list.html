@@ -1,6 +1,8 @@
 {% extends 'mainapp/base.html' %}
+{% load static %}
 {% block css %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<link rel="stylesheet" href="{% static 'additional-styles.css' %}">
 {% endblock %}
 {% block content %}
 {% include 'mainapp/includes/header_of_products.html' %}
@@ -14,6 +16,9 @@
     <table class="table">
         <thead>
             <tr>
+                <th scope="col">Order number</th>
+                <th scope="col">Total cost</th>
+                <th scope="col">Total quantity</th>
                 <th scope="col">Created at</th>
                 <th scope="col">Status</th>
                 <th scope="col"></th>
@@ -24,12 +29,15 @@
         <tbody>
             {% for object in object_list %}
             <tr class="{% if not object.is_active %} inactive {% endif %}">
+                <td>{{ object }}</td>
+                <td>{{ object.get_total_cost }}$</td>
+                <td>{{ object.get_total_quantity }}</td>
                 <td>{{ object.created_at }}</td>
                 <td>{{ object.status }}</td>
+                {% if object.can_pay %}
                 <td>
                     <a href="{% url 'orders:update' object.pk %}" class="btn btn-info">Edit</a>
                 </td>
-                {% if object.can_pay %}
                 <td>
                     <a href="{% url 'orders:pay' object.pk %}" class="btn btn-success">Pay</a>
                 </td>
