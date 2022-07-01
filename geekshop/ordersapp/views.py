@@ -20,8 +20,9 @@ class OrderListView(LoginRequiredMixin, TitleMixin, ListView):
 @login_required
 @transaction.atomic
 def create_order(request):
-    basket_items = request.user.basket.all()
-    if not basket_items:
+    basket = request.user.basket
+    basket_items = basket.all()
+    if not basket_items or not basket.can_create_order():
         return HttpResponseBadRequest()
     order = Order(user=request.user)
     order.save()
@@ -50,7 +51,7 @@ def cancel_order(request, pk):
         return HttpResponseBadRequest()
 
     order.status = Order.CANCELED
-    order.save()
+    order.delete()
     return HttpResponseRedirect(reverse("orders:list"))
 
 
@@ -58,13 +59,22 @@ class OrderUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
     title = "Edit order"
     template_name = "ordersapp/order_update.html"
     model = Order
-    success_url = reverse_lazy("orders:list")
     fields = ()
+
+    def get_success_url(self):
+        order_id = self.kwargs["pk"]
+        return reverse_lazy("orders:update", args=[order_id])
 
     def get_context_data(self, **kwargs):
         formset = kwargs.get("formset", OrderItemFormset(instance=self.object))
         context = super().get_context_data(**kwargs)
-        context["orderitems"] = formset
+        for form in formset:
+            if form.initial:
+                form.initial["price_for_one"] = form.instance.product.price
+                form.initial["sum"] = (
+                    form.instance.product.price * form.instance.quantity
+                )
+        context["formset"] = formset
         return context
 
     def post(self, request, *args, **kwargs):

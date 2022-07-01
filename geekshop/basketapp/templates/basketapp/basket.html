@@ -10,9 +10,20 @@
 {% block content %}
 {% include 'mainapp/includes/header_of_products.html' %}
 <div>
-    <a href="{% url 'orders:create' %}" class="btn btn-primary">Create order </a>
-    <div class="basket_list">
-        {% include 'basketapp/includes/inc_basket_list.html' %}
-    </div>
+    <h1>Basket</h1>
+    {% if basket.all %}
+        <div class="basket_list">
+            {% include 'basketapp/includes/inc_basket_list.html' %}
+        </div>
+    <a href="{% url 'orders:create' %}" class="btn btn-primary 
+        {% if not user.basket.can_create_order %} 
+                disabled
+        {% endif %}">
+        Create order
+    </a>
+    {% else %}
+        <h4>You don't have anything in your basket. You can add products to it
+            <a href="{% url 'products' %}">here</a>.</h4>
+    {% endif %}
 </div>
 {% endblock %}

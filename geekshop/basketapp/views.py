@@ -1,3 +1,4 @@
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, get_object_or_404
 from django.http.response import HttpResponseRedirect
 from django.urls import reverse
@@ -7,18 +8,22 @@ from .models import Basket
 from mainapp.models import Product, Category
 import json
 
-with open((settings.JSON_ROOT / 'data.json'), 'r', encoding='utf-8') as f:
+with open((settings.JSON_ROOT / "data.json"), "r", encoding="utf-8") as f:
     data = json.load(f)
 
 
 @login_required
 def basket(request):
     categories = Category.objects.all()
-    return render(request, 'basketapp/basket.html', context={
-        'categories': categories,
-        'menu': data['menu'],
-        'social_links': data['social_links'],
-    })
+    return render(
+        request,
+        "basketapp/basket.html",
+        context={
+            "categories": categories,
+            "menu": data["menu"],
+            "social_links": data["social_links"],
+        },
+    )
 
 
 @login_required
@@ -28,11 +33,13 @@ def add(request, product_id):
 
     if not basket:
         basket = Basket(user=request.user, product=product)
+    elif basket.quantity >= product.quantity:
+        return HttpResponseBadRequest()
     basket.quantity += 1
     basket.save()
-    if 'login' in request.META.get('HTTP_REFERER'):
-        return HttpResponseRedirect(reverse('product', args=[product_id]))
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'), reverse('index'))
+    if "login" in request.META.get("HTTP_REFERER"):
+        return HttpResponseRedirect(reverse("product", args=[product_id]))
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"), reverse("index"))
 
 
 @login_required
@@ -43,7 +50,7 @@ def remove(request, basket_id):
         basket.delete()
     else:
         basket.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'), reverse('index'))
+    return HttpResponseRedirect(request.META.get("HTTP_REFERER"), reverse("index"))
 
 
 @login_required
@@ -54,4 +61,4 @@ def edit(request, basket_id, quantity):
         basket.delete()
     else:
         basket.save()
-    return render(request, 'basketapp/includes/inc_basket_list.html')
+    return render(request, "basketapp/includes/inc_basket_list.html")

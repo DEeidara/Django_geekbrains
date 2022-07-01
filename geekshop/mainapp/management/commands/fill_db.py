@@ -8,13 +8,15 @@ import os
 
 
 def load_from_json(filename):
-    with open(os.path.join(settings.JSON_ROOT, filename + '.json'), 'r') as f:
+    with open(
+        os.path.join(settings.JSON_ROOT, filename + ".json"), "r", encoding="utf8"
+    ) as f:
         return json.load(f)
 
 
 class Command(BaseCommand):
     def handle(self, *args, **kwargs):
-        categories = load_from_json('categories')
+        categories = load_from_json("categories")
 
         Category.objects.all().delete()
         for category in categories:
@@ -23,14 +25,14 @@ class Command(BaseCommand):
             except IntegrityError:
                 pass
 
-        products = load_from_json('products')
+        products = load_from_json("products")
 
         Product.objects.all().delete()
         for product in products:
-            product['category'] = Category.objects.get(
-                name=product['category'])
+            product["category"] = Category.objects.get(name=product["category"])
             Product.objects.create(**product)
 
-        if not ShopUser.objects.filter(username='admin'):
+        if not ShopUser.objects.filter(username="admin"):
             ShopUser.objects.create_superuser(
-                username='admin', email='admin@localhost', password='adminadmin')
+                username="admin", email="admin@localhost", password="adminadmin"
+            )
