@@ -17,6 +17,3 @@ class OrderItemForm(forms.ModelForm):
         self.fields["product"].queryset = Product.get_items()
         for field_name, field in self.fields.items():
             field.widget.attrs["class"] = "form-control"
-
-
-OrderItemFormset = forms.inlineformset_factory(Order, OrderItem, OrderItemForm, extra=0)

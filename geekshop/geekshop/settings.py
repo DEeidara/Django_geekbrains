@@ -54,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "geekshop.urls"
@@ -72,6 +73,8 @@ TEMPLATES = [
                 "mainapp.context_processors.data",
                 "mainapp.context_processors.basket",
                 "mainapp.context_processors.categories",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
@@ -118,6 +121,7 @@ AUTH_USER_MODEL = "authapp.ShopUser"
 
 LOGIN_URL = "auth:login"
 LOGIN_REDIRECT_URL = "index"
+LOGIN_ERROR_URL = "/"
 
 
 AUTHENTICATION_BACKENDS = [

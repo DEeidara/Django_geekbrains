@@ -34,19 +34,27 @@
                 <td>{{ object.get_total_quantity }}</td>
                 <td>{{ object.created_at }}</td>
                 <td>{{ object.status }}</td>
-                {% if object.can_pay %}
                 <td>
-                    <a href="{% url 'orders:update' object.pk %}" class="btn btn-info">Edit</a>
+                    <a href="{% url 'orders:update' object.pk %}" 
+                    class="btn btn-info
+                        {% if not object.can_pay %}
+                            disabled
+                        {% endif %}">Edit</a>
                 </td>
                 <td>
-                    <a href="{% url 'orders:pay' object.pk %}" class="btn btn-success">Pay</a>
+                    <a href="{% url 'orders:pay' object.pk %}" 
+                    class="btn btn-success
+                        {% if not object.can_pay %}
+                            disabled
+                        {% endif %}">Pay</a>
                 </td>
-                {% endif %}
-                {% if object.can_cancel %}
                 <td>
-                    <a href="{% url 'orders:cancel' object.pk %}" class="btn btn-danger">Cancel</a>
+                    <a href="{% url 'orders:cancel' object.pk %}" 
+                    class="btn btn-danger
+                        {% if not object.can_cancel %}
+                            disabled
+                        {% endif %}">Cancel</a>
                 </td>
-                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

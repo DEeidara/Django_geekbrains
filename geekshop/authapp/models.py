@@ -28,10 +28,14 @@ class ShopUser(AbstractUser):
 
 
 class ShopUserProfile(models.Model):
+    MALE = "M"
+    FEMALE = "F"
+    OTHER = "O"
+
     GENDERS = [
-        ("M", "Male"),
-        ("F", "Female"),
-        ("O", "Other"),
+        (MALE, "Male"),
+        (FEMALE, "Female"),
+        (OTHER, "Other"),
     ]
 
     user = models.OneToOneField(
@@ -44,7 +48,6 @@ class ShopUserProfile(models.Model):
 @receiver(post_save, sender=ShopUser)
 def update_user_profile(sender, instance, created, **kwargs):
     if created:
-        profile = ShopUserProfile(user=instance)
-        profile.save()
+        ShopUserProfile.objects.create(user=instance)
     else:
         instance.profile.save()

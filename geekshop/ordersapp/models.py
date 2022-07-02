@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from mainapp.models import Product
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, pre_delete
 
 
 class Order(models.Model):
@@ -24,6 +24,7 @@ class Order(models.Model):
     )
     status = models.CharField(max_length=16, choices=STATUSES, default="CREATED")
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -53,22 +54,12 @@ class Order(models.Model):
         return self.status in [Order.CREATED, Order.PAID]
 
 
-class OrderItemManager(models.Manager):
-    def total_quantity(self):
-        return sum(item.quantity for item in self.all())
-
-    def total_sum(self):
-        return sum(item.product.price * item.quantity for item in self.all())
-
-
 class OrderItem(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, related_name="order_items"
     )
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
-
-    objects = OrderItemManager()
 
     @property
     def cost(self):
@@ -79,11 +70,17 @@ class OrderItem(models.Model):
 
 
 @receiver(pre_save, sender=OrderItem)
-def update_order_item(sender, instance, *args, **kwargs):
+def product_quantity_update_on_save(sender, instance, *args, **kwargs):
     old_order_item = OrderItem.objects.filter(pk=instance.pk).first()
     if old_order_item:
         quantity_delta = instance.quantity - old_order_item.quantity
         instance.product.quantity -= quantity_delta
     else:
         instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+
+@receiver(pre_delete, sender=OrderItem)
+def product_quantity_update_on_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
     instance.product.save()

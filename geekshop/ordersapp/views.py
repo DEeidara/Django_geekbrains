@@ -1,12 +1,15 @@
+from django.forms import inlineformset_factory
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
-from .forms import OrderItemFormset
-from .models import Order, OrderItem
+from ordersapp.models import Order, OrderItem
+from ordersapp.forms import OrderItemForm
 from django.contrib.auth.decorators import login_required
 from utils.mixins import LoginRequiredMixin, TitleMixin
 from django.views.generic import ListView, UpdateView
 from django.db import transaction
+
+OrderFormSet = inlineformset_factory(Order, OrderItem, form=OrderItemForm, extra=2)
 
 
 class OrderListView(LoginRequiredMixin, TitleMixin, ListView):
@@ -66,33 +69,30 @@ class OrderUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
         return reverse_lazy("orders:update", args=[order_id])
 
     def get_context_data(self, **kwargs):
-        formset = kwargs.get("formset", OrderItemFormset(instance=self.object))
-        context = super().get_context_data(**kwargs)
-        for form in formset:
-            if form.initial:
-                form.initial["price_for_one"] = form.instance.product.price
-                form.initial["sum"] = (
-                    form.instance.product.price * form.instance.quantity
-                )
-        context["formset"] = formset
-        return context
+        data = super().get_context_data(**kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form()
-        formset = OrderItemFormset(self.request.POST, instance=self.object)
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
+        if self.request.POST:
+            data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            return self.form_invalid(form, formset)
+            orderitems = OrderFormSet(instance=self.object)
+            for form in orderitems.forms:
+                if form.instance.pk:
+                    form.initial["price_for_one"] = form.instance.product.price
+                    form.initial["sum"] = (
+                        form.instance.product.price * form.initial["quantity"]
+                    )
+            data["orderitems"] = orderitems
+        return data
 
-    @transaction.atomic
-    def form_valid(self, form, formset):
-        self.object = form.save()
-        formset.save()
+    def form_valid(self, form):
+
+        context = self.get_context_data()
+        orderitems = context["orderitems"]
+
+        with transaction.atomic():
+            self.object = form.save()
+            if orderitems.is_valid():
+                orderitems.instance = self.object
+                orderitems.save()
+
         return super().form_valid(form)
-
-    def form_invalid(self, form, formset):
-        return self.render_to_response(
-            self.get_context_data(form=form, formset=formset)
-        )
