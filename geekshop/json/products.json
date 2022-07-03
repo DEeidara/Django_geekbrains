@@ -1,0 +1,90 @@
+[
+    {
+        "category": "Chairs",
+        "name": "Chair 1",
+        "description": "Really cool chair",
+        "image": "product_images/product-11.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Chairs",
+        "name": "Chair 2",
+        "description": "Really cool chair",
+        "image": "product_images/product-2.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Chairs",
+        "name": "Chair 3",
+        "description": "Really cool chair",
+        "image": "product_images/product-51.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Chairs",
+        "name": "Chair 4",
+        "description": "Really cool chair",
+        "image": "product_images/product-4.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Chairs",
+        "name": "Chair 5",
+        "description": "Really cool chair",
+        "image": "product_images/product-21.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Chairs",
+        "name": "Chair 6",
+        "description": "Really cool chair",
+        "image": "product_images/product-1.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Tables",
+        "name": "Table 1",
+        "description": "Cool table",
+        "image": "product_images/product-51.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Tables",
+        "name": "Table 2",
+        "description": "Cool table",
+        "image": "product_images/product-61.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Tables",
+        "name": "Table 3",
+        "description": "Cool table",
+        "image": "product_images/product-1.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Tables",
+        "name": "Table 4",
+        "description": "Cool table",
+        "image": "product_images/product-2.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    },
+    {
+        "category": "Tables",
+        "name": "Table 5",
+        "description": "Cool table",
+        "image": "product_images/product-4.jpg",
+        "price": "1000",
+        "quantity": "10000"
+    }
+]

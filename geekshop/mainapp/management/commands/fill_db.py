@@ -34,5 +34,7 @@ class Command(BaseCommand):
 
         if not ShopUser.objects.filter(username="admin"):
             ShopUser.objects.create_superuser(
-                username="admin", email="admin@localhost", password="adminadmin"
+                username="admin",
+                email="admin@localhost",
+                password="adminadmin",
             )
