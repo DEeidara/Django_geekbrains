@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -86,17 +86,28 @@ WSGI_APPLICATION = "geekshop.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+
+# mysql
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "django_geekbrains",
+#         "USER": "root",
+#         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
+
+
+# postgresql
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.mysql",
+        "ENGINE": "django.db.backends.postgresql",
         "NAME": "django_geekbrains",
-        "USER": "root",
-        "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-        "HOST": "localhost",
-        "PORT": "3306",
+        "USER": "postgres",
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
