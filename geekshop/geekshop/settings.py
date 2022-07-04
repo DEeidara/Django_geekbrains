@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(int(os.environ.get("DEBUG")))
 
 ALLOWED_HOSTS = ["*"]
 
@@ -86,28 +86,29 @@ WSGI_APPLICATION = "geekshop.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-
-# mysql
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "django_geekbrains",
-#         "USER": "root",
-#         "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
-#         "HOST": "localhost",
-#         "PORT": "3306",
-#     }
-# }
-
-
-# postgresql
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "django_geekbrains",
-        "USER": "postgres",
+USE_POSTGRES = bool(int(os.environ.get("USE_POSTGRES")))
+if USE_POSTGRES:
+    # postgresql
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": "django_geekbrains",
+            "USER": "postgres",
+        }
     }
-}
+else:
+    # mysql
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "django_geekbrains",
+            "USER": "root",
+            "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
