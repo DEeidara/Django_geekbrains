@@ -5,7 +5,9 @@
 <form class="form-horizontal" action="{% url 'auth:edit' %}" method="post"
 enctype="multipart/form-data">
     {% csrf_token %}
+    {% if user.avatar %}
     <img src="{{ user.avatar.url }}" alt="">
+    {% endif %}
     {{ user_form.as_p }}
     {{ profile_form.as_p }}
     <input class="indent-class form-control btn btn-primary" type="submit" value="Save">

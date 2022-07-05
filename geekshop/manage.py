@@ -7,9 +7,7 @@ import dotenv
 
 def main():
     """Run administrative tasks."""
-    USE_DOTENV = bool(int(os.environ.get("USE_DOTENV")))
-    if USE_DOTENV:
-        dotenv.read_dotenv()
+    dotenv.read_dotenv()
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geekshop.settings")
     try:

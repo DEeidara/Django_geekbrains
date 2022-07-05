@@ -17,7 +17,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="product_images", blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(db_index=True, default=True)
 
     @staticmethod
     def get_items():
