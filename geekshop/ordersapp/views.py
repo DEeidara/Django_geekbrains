@@ -74,7 +74,8 @@ class OrderUpdateView(LoginRequiredMixin, TitleMixin, UpdateView):
         if self.request.POST:
             data["orderitems"] = OrderFormSet(self.request.POST, instance=self.object)
         else:
-            orderitems = OrderFormSet(instance=self.object)
+            queryset = self.object.orderitems.select_related()
+            orderitems = OrderFormSet(instance=self.object, queryset=queryset)
             for form in orderitems.forms:
                 if form.instance.pk:
                     form.initial["price_for_one"] = form.instance.product.price
