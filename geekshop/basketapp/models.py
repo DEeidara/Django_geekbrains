@@ -1,6 +1,7 @@
 from django.db import models
 from mainapp.models import Product
 from django.contrib.auth import get_user_model
+from django.utils.functional import cached_property
 
 
 class BasketManager(models.Manager):
@@ -24,7 +25,7 @@ class Basket(models.Model):
 
     objects = BasketManager()
 
-    @property
+    @cached_property
     def cost(self):
         return self.quantity * self.product.price
 

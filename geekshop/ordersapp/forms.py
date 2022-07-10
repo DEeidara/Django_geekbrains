@@ -1,6 +1,5 @@
-from email.policy import default
 from django import forms
-from .models import Order, OrderItem
+from .models import OrderItem
 from mainapp.models import Product
 
 

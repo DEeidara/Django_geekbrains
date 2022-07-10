@@ -8,8 +8,10 @@
 <a href="{% url 'orders:list' %}" class="btn btn-primary"><- Back to Orders</a>
 <h1 class='form-header order-indentation'>{{ title }}</h1>
 <div class="order_form">
-    <h4>Number of items in the cart: {{ object.get_total_quantity }}</h4>
-    <h4>Total cost of items in the cart: {{ object.get_total_cost }}$</h4>
+    {% with object_summary = object.get_summary %}
+    <h4>Number of items in the cart: {{ object_summary.total_quantity }}</h4>
+    <h4>Total cost of items in the cart: {{ object_summary.total_cost }}$</h4>
+    {% endwith %}
     <form class="form-horizontal" method="post">
         {% csrf_token %}
         {{ form.as_p }}
@@ -36,7 +38,13 @@
                                 {% endfor %}    
                             {% endif %}
                             {{ field.errors.as_ul }}
-                            {{ field }}
+                            {% if field.name == 'product' %}
+                                {% cache 3600 orderitemsform_product field.value %}
+                                    {{ field }}
+                                {% endcache %}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
                         </td>
                     {% endfor %}
                 </tr>

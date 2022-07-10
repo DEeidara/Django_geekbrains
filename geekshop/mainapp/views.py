@@ -4,6 +4,7 @@ import random
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
+from django.views.decorators.cache import cache_page
 
 
 def index(request):
@@ -39,6 +40,7 @@ def product(request, pk):
     )
 
 
+@cache_page(3600)
 def contact(request):
     return render(
         request,

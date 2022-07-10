@@ -30,13 +30,12 @@ class Order(models.Model):
     def __str__(self):
         return f"№{self.id}"
 
-    def get_total_quantity(self):
+    def get_summary(self):
         items = self.order_items.select_related()
-        return sum(list(map(lambda x: x.quantity, items)))
-
-    def get_total_cost(self):
-        items = self.order_items.select_related()
-        return sum(list(map(lambda x: x.quantity * x.product.price, items)))
+        return {
+            "total_cost": sum(list(map(lambda x: x.quantity * x.product.price, items))),
+            "total_quantity": sum(list(map(lambda x: x.quantity, items))),
+        }
 
     def delete(self):
         for item in self.order_items.select_related():

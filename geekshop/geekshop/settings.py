@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     "ordersapp",
 ]
 
+# the first and last ones are for caching the whole site
 MIDDLEWARE = [
+    # "django.middleware.cache.UpdateCacheMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "social_django.middleware.SocialAuthExceptionMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "geekshop.urls"
@@ -86,8 +89,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "geekshop.wsgi.application"
 
-
 # Debug panel
+
+INTERNAL_IPS = ["127.0.0.1"]
+
 if DEBUG:
 
     def show_toolbar(request):
@@ -207,7 +212,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = "/static/"
+STATIC_URL = os.environ.get("STATIC_URL")
 
 STATIC_ROOT = BASE_DIR / "collected_static"
 
@@ -233,3 +238,19 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 EMAIL_FILE_PATH = "./mails/"
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 SITE_ADDRESS = "http://localhost:8000/"
+
+
+# Cache
+USE_CACHE = bool(int(os.environ.get("USE_CACHE")))
+if USE_CACHE:
+    CACHE_MIDDLEWARE_ALIAS = "default"
+    CACHE_MIDDLEWARE_SECONDS = 120
+    CACHE_MIDDLEWARE_KEY_PREFIX = "geekshop"
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+            "LOCATION": "127.0.0.1:11211",
+        }
+    }
+
+    LOW_CACHE = True
