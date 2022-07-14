@@ -124,6 +124,7 @@ if DEBUG:
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 USE_POSTGRES = bool(int(os.environ.get("USE_POSTGRES")))
+USE_MYSQL = bool(int(os.environ.get("USE_MYSQL")))
 if USE_POSTGRES:
     # postgresql
     DATABASES = {
@@ -133,7 +134,7 @@ if USE_POSTGRES:
             "USER": "postgres",
         }
     }
-else:
+elif USE_MYSQL:
     # mysql
     DATABASES = {
         "default": {
@@ -143,6 +144,13 @@ else:
             "PASSWORD": os.environ.get("DATABASE_PASSWORD"),
             "HOST": "localhost",
             "PORT": "3306",
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
@@ -252,5 +260,4 @@ if USE_CACHE:
             "LOCATION": "127.0.0.1:11211",
         }
     }
-
-    LOW_CACHE = True
+LOW_CACHE = bool(int(os.environ.get("LOW_CACHE")))

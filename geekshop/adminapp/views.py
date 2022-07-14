@@ -13,6 +13,7 @@ from django.urls import reverse, reverse_lazy
 from utils.decorators import check_is_superuser
 from utils.mixins import SuperUserRequiredMixin, TitleMixin
 from django.views.generic import ListView, CreateView, UpdateView
+from django.db.models import F
 
 
 class UserListView(SuperUserRequiredMixin, TitleMixin, ListView):
@@ -79,6 +80,14 @@ class CategoryUpdateView(SuperUserRequiredMixin, TitleMixin, UpdateView):
     template_name = "adminapp/category_update.html"
     success_url = reverse_lazy("admin:categories")
     form_class = CategoryCreateEditForm
+
+    # it's just a case study, must not be used anywhere else
+    def form_valid(self, form):
+        if "discount" in form.cleaned_data:
+            discount = form.cleaned_data["discount"]
+            if discount:
+                self.object.product_set.update(price=F("price") * (1 - discount / 100))
+        return super().form_valid(form)
 
 
 @check_is_superuser

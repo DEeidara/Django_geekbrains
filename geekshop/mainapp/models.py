@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 
 
 class Category(models.Model):
@@ -25,3 +27,8 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.id}: {self.name}"
+
+
+@receiver(pre_save, sender=Category)
+def update_product_is_active(sender, instance, **kwargs):
+    Product.objects.filter(category=instance).update(is_active=instance.is_active)
