@@ -5,6 +5,7 @@ from django.forms import (
     CharField,
     PasswordInput,
     ModelForm,
+    IntegerField,
 )
 from django.forms.widgets import HiddenInput
 from authapp.models import ShopUser
@@ -67,6 +68,8 @@ class CategoryCreateEditForm(ModelForm):
     class Meta:
         model = Category
         fields = "__all__"
+
+    discount = IntegerField(required=False, min_value=0, max_value=100, initial=0)
 
 
 class ProductCreateEditForm(ModelForm):
